@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:webview_flutter/platform_interface.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class RecipeView extends StatefulWidget {
@@ -19,7 +18,8 @@ class RecipeView extends StatefulWidget {
 class _RecipeViewState extends State<RecipeView> {
   String finalurl;
 
-  final _controller = Completer<WebViewPlatformController>();
+  final Completer<WebViewController> _controller =
+      Completer<WebViewController>();
 
   @override
   void initState() {
@@ -74,10 +74,8 @@ class _RecipeViewState extends State<RecipeView> {
               child: WebView(
                 initialUrl: widget.postUrl,
                 javascriptMode: JavascriptMode.unrestricted,
-                onWebViewCreated: (controller) {
-                  setState(() {
-                    _controller.complete();
-                  });
+                onWebViewCreated: (WebViewController webViewController) {
+                  _controller.complete(webViewController);
                 },
               ),
             ),
